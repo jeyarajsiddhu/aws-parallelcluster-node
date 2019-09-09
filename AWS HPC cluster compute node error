@@ -1,0 +1,71 @@
+Hi,
+
+I would like to create a cluster using parallel cluster on AWS. Please find the steps which i have followed below,
+
+Steps:
+
+# sudo yum install -y https://centos7.iuscommunity.org/ius-release.rpm
+
+# yum install epel-release
+
+# sudo yum install -y python36u python36u-libs python36u-devel python36u-pip
+
+# yum install python-pip
+
+# sudo pip3.6 install aws-parallelcluster
+
+# sudo pip install awscli
+
+# aws configure
+# pcluster configure
+
+# nano /root/.parallelcluster/config
+
+
+[aws]
+aws_region_name = ap-south-1
+aws_access_key_id = AKIAJO6NAY3QUQNPKCTA
+aws_secret_access_key = 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
+
+[cluster CAWS]
+key_name = CalligoAWS
+vpc_settings = public
+initial_queue_size = 2
+max_queue_size = 2
+master_instance_type = c5.large
+compute_instance_type = c5.18xlarge
+maintain_initial_size = true
+cluster_type = spot
+scheduler = slurm
+placement_group = DYNAMIC
+base_os = centos7
+enable_efa = compute
+
+[vpc public]
+vpc_id = vpc-5fd9ad36
+master_subnet_id = subnet-6243e82f
+
+[ebs myebs]
+shared_dir = shared
+volume_type = st1
+volume_size = 10
+
+[global]
+cluster_template = CAWS
+update_check = true
+sanity_check = true
+
+[aliases]
+ssh = ssh {CFN_USER}@{MASTER_IP} {ARGS}
+
+
+## With the above configuration file i tried creating the cluster via the below command,
+
+# pcluster create mycluster
+
+# Later i see 1 cluster (Master) getting created and get terminated in no time for no reason and the compute is not even getting created ..
+
+Request your help here, not sure what is going wrong with this. 
+
+Please suggest !!
+
